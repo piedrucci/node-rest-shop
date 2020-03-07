@@ -12,6 +12,8 @@ mongoose.connect('mongodb+srv://' + process.env.MONGO_ATLAS_USER + ':' + process
     useUnifiedTopology: true,
 });
 
+mongoose.Promise = global.Promise;
+
 app.use(morgan('dev'));
 app.use(
     bodyParser.urlencoded(

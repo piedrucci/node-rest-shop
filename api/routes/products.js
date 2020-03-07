@@ -6,8 +6,12 @@ const mongoose = require('mongoose');
 
 router.get('/', (req, res, next) => {
     Product.find()
+        .select('_id name price')
         .exec()
-        .then(docs => res.status(200).json(docs))
+        .then(docs => res.status(200).json({
+            count: docs.length,
+            results: docs
+        }))
         .catch(err => res.status(500).json(err));
 });
 
@@ -24,8 +28,13 @@ router.post('/', (req, res, next) => {
             res.status(201).json(result);
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({error: true})
+            const errors = err.errors;
+            const validationErrors = Object.keys(errors);
+            const listErrors = [];
+            for (const f of validationErrors) {
+                listErrors.push({[f]: errors[f]['message']});
+            }
+            res.status(400).json({errors: listErrors});
         });
 });
 
