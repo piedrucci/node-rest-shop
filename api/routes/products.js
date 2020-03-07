@@ -23,9 +23,7 @@ router.post('/', (req, res, next) => {
     });
     product
         .save()
-        .then(result => {
-            res.status(201).json(result);
-        })
+        .then(result => res.status(201).json(result))
         .catch(err => {
             const errors = err.errors;
             const validationErrors = Object.keys(errors);
@@ -61,7 +59,7 @@ router.patch('/:productId', (req, res, next) => {
         newValues[key] = req.body[key];
     })
 
-    Product.update({_id: id}, {$set: newValues})
+    Product.updateOne({_id: id}, {$set: newValues})
         .exec()
         .then(doc => res.status(200).json(doc))
         .catch(err => res.status(500).json(err));
