@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Product = require('./../models/products');
 const mongoose = require('mongoose');
+const checkAuth = require('./../middleware/check-auth');
 
-
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
     Product.find()
         .select('_id name price')
         .exec()
