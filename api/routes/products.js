@@ -1,46 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET request to /products'
-    });
-});
+const checkAuth = require('./../middleware/check-auth');
+const ProductsController = require('./../controllers/products');
 
-router.post('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling POST request to /products'
-    });
-});
+router.get('/', checkAuth, ProductsController.products_get_all);
 
-router.get('/:productId', (req, res, next) => {
-    const id = req.params.productId;
+router.post('/', checkAuth, ProductsController.products_create_product);
 
-    if (id === 'special') {
-        res.status(200).json({
-            message: 'You discovered the special ID',
-            id: id
+router.get('/:productId', checkAuth, ProductsController.products_get_product);
 
-        });
-    } else {
-        res.status(200).json({
-            message: 'You passed an ID',
-            id: id
+router.patch('/:productId', checkAuth, ProductsController.products_update_product);
 
-        });
-    }
-});
-
-router.patch('/:productId', (req, res, next) => {
-    res.status(200).json({
-        message: 'Updated product'
-    });
-});
-
-router.delete('/:productId', (req, res, next) => {
-    res.status(200).json({
-        message: 'Deleted product'
-    });
-});
+router.delete('/:productId', checkAuth, ProductsController.products_delete_product);
 
 module.exports = router;
